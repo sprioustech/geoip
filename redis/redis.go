@@ -11,8 +11,8 @@ import (
 
 const (
 	redisConnType = "unix"
-	redisAddr = "/var/run/redis/redis.sock"
-	redisDB = 1
+	redisAddr     = "/var/run/redis/redis.sock"
+	redisDB       = 1
 )
 
 var (
@@ -85,6 +85,18 @@ func Set(key string, value []byte) error {
 			v = v[0:12] + "..."
 		}
 		return fmt.Errorf("error setting key %s to %s: %v", key, v, err)
+	}
+	return err
+}
+
+func Expire(key string, duration int) error {
+
+	conn := Pool.Get()
+	defer conn.Close()
+
+	_, err := conn.Do("EXPIRE", key, duration)
+	if err != nil {
+		return fmt.Errorf("error setting ttl for key %s to %d: %v", key, duration, err)
 	}
 	return err
 }
