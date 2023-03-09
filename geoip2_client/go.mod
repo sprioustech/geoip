@@ -1,3 +1,5 @@
 module github.com/sprioustech/geoip/geoip2_client
 
-go 1.13
+go 1.18
+
+require golang.org/x/net v0.8.0
